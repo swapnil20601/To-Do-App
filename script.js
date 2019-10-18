@@ -1,24 +1,25 @@
-//get form id from DOM
-let form = document.getElementById('add-form');
+    //get form id from DOM
+    const form = document.getElementById('add-form');
 
-//grab ordered list from DOM
-let itemList = document.getElementById('ordered-list');
+    //grab ordered list from DOM
+    const itemList = document.getElementById('ordered-list');
+    
+    //grab clear button from DOM
+    const clear = document.getElementById('button');
+    
+    //Initially clear button is disabled since there are no to-do items added
+    clear.disabled = true;
+    
+    //Fire submit event to submit form
+    form.addEventListener('submit', addToDoItem);
+    
+    //Fire click event to remove to-do item
+    itemList.addEventListener('click', removeToDoItem);
+    
+    //Fire click event to clear to-do list
+    clear.addEventListener('click', clearList);
 
-//grab clear button from DOM
-let clear = document.getElementById('button');
-
-//Initially clear button is disabled since there are no to-do items added
-clear.disabled = true;
-
-//Fire submit event to submit form
-form.addEventListener('submit', addToDoItem);
-
-//Fire click event to remove to-do item
-itemList.addEventListener('click', removeToDoItem);
-
-//Fire click event to clear to-do list
-clear.addEventListener('click', clearList);
-
+    const names = [];
 
 
 //Function to add to-do item
@@ -30,7 +31,7 @@ function addToDoItem(e) {
    
     //Create li element
     let li = document.createElement('li');
-
+    
     //Create text node
     let textNode = document.createTextNode(inputItem);
 
@@ -38,8 +39,14 @@ function addToDoItem(e) {
     li.appendChild(textNode);
     li.innerHTML = `${inputItem} &nbsp; &nbsp;`;
 
+    //Adding each li node to class'to-do'
+    li.className = 'to-do';
+
     //create delete button
     let btn = document.createElement('button');
+
+    //Adding id for each delete button when to-do item is added
+    btn.id = 'delete-button';
 
     //create text node for button
     let btnText = document.createTextNode('Delete');
@@ -48,10 +55,25 @@ function addToDoItem(e) {
     btn.appendChild(btnText);
 
     //append button to li node
-    li.appendChild(btn);
+    li.appendChild(btn)
+
+    
+    Array.from(document.getElementsByTagName('li')).forEach(function(x) {
+        console.log(x);
+    });
     
     //append li to ordered-list in DOM
-    itemList.appendChild(li);
+    let swapnil = itemList.appendChild(li);
+
+    swapnil.addEventListener('click', function(e) {
+        let trimedText = e.target.firstChild.data.trim();
+        if(names.includes(e.target.firstChild.data)) {
+            console.log('ok');
+        } else {
+            console.log('no');
+        }
+        
+    })
 
     //reset form to clear input field
     form.reset();
@@ -62,13 +84,9 @@ function addToDoItem(e) {
 
 //Function to remove to-do item
 function removeToDoItem(e) {
-    if(e.target.firstChild.data != 'Delete') {
-       e.target.innerHTML = `<del>${e.target.firstChild.data}</del><button>Delete</button>`;
-    }
-    else {
+    if(e.target.id === 'delete-button') {
         if(confirm('Are you sure?')) {
-            var li = e.target.parentElement;
-            li.remove();
+            e.target.parentElement.remove();
         }
     }
 
@@ -81,10 +99,24 @@ function removeToDoItem(e) {
 
 //Function to clear to-do list
 function clearList(e) {
+    //ask for confirmation before clearing the list
     if(confirm('Do you want to clear whole list?')) {
-        itemList.remove();
+        const todos = Array.from(document.getElementsByClassName('to-do'));
+        todos.forEach(function(todo) {
+            todo.remove();
+         });       
     }
 
     //disable clear button again because we have cleared whole to-do list
     clear.disabled = true;
 }
+
+
+// //Function to mark to-do item as complete
+// function markAsComplete(e) {
+//     console.log('hi')
+//     if(names.includes(e.target.firstChild.data)) {
+//         console.log(e.target.firstChild.data);
+//     }
+    
+// }
