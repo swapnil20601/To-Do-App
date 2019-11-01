@@ -1,0 +1,13 @@
+body{
+    text-align: center;
+}
+
+#delete-button {
+    padding: 0.8em;
+    margin: 15px;
+}
+
+.strikeout{
+    text-decoration-line: line-through;
+}
+
